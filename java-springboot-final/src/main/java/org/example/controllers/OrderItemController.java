@@ -3,7 +3,6 @@ package org.example.controllers;
 
 import org.example.daos.OrderItemDao;
 import org.example.models.OrderItem;
-import org.example.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -90,7 +89,7 @@ public class OrderItemController {
     @DeleteMapping(path = "/{id}")
     public int delete(@PathVariable int id) {
         if(orderItemDao.getOrderItemById(id) == null)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Order item not found");
         return orderItemDao.deleteOrderItem(id);
     }
 }

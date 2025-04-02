@@ -10,7 +10,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -50,7 +49,7 @@ public class OrderDao {
      * @return List of orders with the given username.
      */
     public List<Order> getOrdersByUsername(String username) {
-        return jdbcTemplate.query("SELECT * FROM orders WHERE username =?", this::mapToOrder, username);
+        return jdbcTemplate.query("SELECT * FROM orders WHERE username = ?", this::mapToOrder, username);
     }
 
     /**
@@ -75,13 +74,10 @@ public class OrderDao {
      */
     public Order createOrder(Order order) {
         try {
-            PreparedStatementCreator psc = new PreparedStatementCreator() {
-                @Override
-                public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-                    PreparedStatement ps = con.prepareStatement("INSERT INTO orders (username) VALUES (?)", new String[]{"id"});
-                    ps.setString(1, order.getUsername());
-                    return ps;
-                }
+            PreparedStatementCreator psc = con -> {
+                PreparedStatement ps = con.prepareStatement("INSERT INTO orders (username) VALUES (?)", new String[]{"id"});
+                ps.setString(1, order.getUsername());
+                return ps;
             };
 
             KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -107,9 +103,9 @@ public class OrderDao {
     }
 
     /**
-     * Deletes a user.
+     * Deletes an order.
      *
-     * @param id The id of the user.
+     * @param id The id of the order.
      * @return The number of rows affected (1 if an order was deleted, 0 if no order was found).
      */
     public int deleteOrder(int id) {

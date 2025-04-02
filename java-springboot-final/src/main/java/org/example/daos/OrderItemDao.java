@@ -10,7 +10,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,7 +27,7 @@ public class OrderItemDao {
     private final JdbcTemplate jdbcTemplate;
 
     /**
-     * Creates a new order items data access object
+     * Creates a new order item data access object
      *
      * @param dataSource The data source for the DAO.
      */
@@ -51,7 +50,7 @@ public class OrderItemDao {
      * @return List of order items with the given order id.
      */
     public List<OrderItem> getOrderItemsByOrderId(Long orderId) {
-        return jdbcTemplate.query("SELECT * FROM order_items WHERE order_id =?", this::mapToOrderItem, orderId);
+        return jdbcTemplate.query("SELECT * FROM order_items WHERE order_id = ?", this::mapToOrderItem, orderId);
     }
 
     /**
@@ -110,12 +109,20 @@ public class OrderItemDao {
      * Deletes an order item.
      *
      * @param id The id of the order item.
-     * @return The number of rows affected (1 if a product was deleted, 0 if no order was found).
+     * @return The number of rows affected (1 if an order item was deleted, 0 if no order item was found).
      */
     public int deleteOrderItem(int id) {
         return jdbcTemplate.update("DELETE FROM products WHERE id = ?", id);
     }
 
+    /**
+     * Maps a row in the ResultSet to an Order Item object.
+     *
+     * @param rs The result set to map.
+     * @param rowNum The row number.
+     * @return The order item object.
+     * @throws SQLException If an error occurs while mapping the result set.
+     */
     private OrderItem mapToOrderItem(ResultSet rs, int rowNum) throws SQLException {
         return new OrderItem(
                 rs.getInt("id"),

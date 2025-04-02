@@ -85,7 +85,7 @@ public class ProductController {
     @DeleteMapping(path = "/{id}")
     public int delete(@PathVariable int id) {
         if(productDao.getProductById(id) == null)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found");
-        return productDao.deleteOrder(id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");
+        return productDao.deleteProduct(id);
     }
 }

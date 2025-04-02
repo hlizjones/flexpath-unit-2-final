@@ -10,7 +10,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -27,7 +26,7 @@ public class ProductDao {
     private final JdbcTemplate jdbcTemplate;
 
     /**
-     * Creates a new products data access object
+     * Creates a new product data access object
      *
      * @param dataSource The data source for the DAO.
      */
@@ -78,7 +77,7 @@ public class ProductDao {
             Number key = keyHolder.getKey();
             return getProductById(key.intValue());
         } catch (EmptyResultDataAccessException e) {
-            throw new DaoException("Failed to create order.");
+            throw new DaoException("Failed to create product.");
         }
     }
 
@@ -99,9 +98,9 @@ public class ProductDao {
      * Deletes a product.
      *
      * @param id The id of the product.
-     * @return The number of rows affected (1 if a product was deleted, 0 if no order was found).
+     * @return The number of rows affected (1 if a product was deleted, 0 if no product was found).
      */
-    public int deleteOrder(int id) {
+    public int deleteProduct(int id) {
         return jdbcTemplate.update("DELETE FROM products WHERE id = ?", id);
     }
 
